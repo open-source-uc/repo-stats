@@ -71,7 +71,15 @@ for fork in data["repository"]["forks"]["nodes"]:
 # Match markdown links in a list
 md = data["repository"]["object"]["text"]
 for match in re.findall(r"- \[@?(.*)\]\((.*)\)", md):
-    users[match[0]].readme = True
+    matched_user: str = match[0]
+    found = False
+    users_iter = iter(users.keys())
+    while not found and (inserted_user := next(users_iter, None)):
+        if matched_user.upper() == inserted_user.upper():
+            users[inserted_user].readme = True
+            found = True
+    if not found:
+        users[matched_user].readme = True
 
 
 # Create a CSV file with the users
