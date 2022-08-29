@@ -1,0 +1,25 @@
+query ($owner: String!, $repo: String!, $blob: String = "main:readme.md") { 
+  repository(owner: $owner, name: $repo) {
+    object(expression: $blob) {
+        ... on Blob {
+           text
+      }
+    }
+    forks(last: 100) {
+      nodes {
+        createdAt
+        owner {
+          login
+        }
+      }
+    }
+    pullRequests(last: 100) {
+      nodes {
+        createdAt
+        author {
+          login
+        }
+      }
+    }
+  }
+}
